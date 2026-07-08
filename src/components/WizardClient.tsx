@@ -303,6 +303,15 @@ function ActionView({
         ))}
       </div>
 
+      {step.videoNote && (
+        <div className="mt-6 border border-coral/60 bg-coral/[0.08] p-4">
+          <p className="eyebrow mb-2 text-ink">One correction to the video</p>
+          <p className="font-body text-sm leading-relaxed text-ink/80">
+            {step.videoNote}
+          </p>
+        </div>
+      )}
+
       <div className="mt-6">
         <VideoEmbed url={VIDEOS[step.video]} />
       </div>

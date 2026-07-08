@@ -37,11 +37,9 @@ export const VIDEOS: Record<VideoKey, string | null> = {
   // Step 5 — creating a real ad account
   adAccount: "https://www.loom.com/embed/635484e93e834d729cc964e0f750a5cc",
   // Step 6 — inviting our Business Portfolio as a partner and selecting assets.
-  // Needs one combined walkthrough. Two older single-asset recordings exist and
-  // can be reused if helpful:
-  //   Facebook page access:    https://www.loom.com/embed/a1f6badc8b744e82b4ad49c71dd1414a
-  //   Grant ad account access: https://www.loom.com/embed/c8c025f73680401b8c98bd777cfb5bd4
-  inviteTeam: null,
+  // NOTE: this recording demonstrates adding via People/email; the step's
+  // videoNote corrects that to the Partner + Portfolio ID flow.
+  inviteTeam: "https://www.loom.com/embed/2b959f77906242d0b2a177226c6631a9",
 };
 
 export type Interstitial =
@@ -86,6 +84,8 @@ export interface ActionStep {
   title: string;
   body: string[];
   video: VideoKey;
+  /** A correction/caveat shown in a callout right above the video. */
+  videoNote?: string;
   showPortfolioId: boolean;
   checklist?: ChecklistItem[];
   warning?: string;
@@ -248,6 +248,8 @@ export const STEPS: Step[] = [
       "In your Business settings, add a Partner using the ID below, then select the assets on the checklist. The walkthrough shows exactly where everything is.",
     ],
     video: "inviteTeam",
+    videoNote:
+      "One correction to the video: it shows adding us under People by email — please don't do it that way. Add us as a Partner instead. When you go to add access, choose Partner (not Person). It'll ask for a Business Portfolio ID — that's the number below, not an email address. Everything after that (selecting your assets and confirming) works exactly the same.",
     showPortfolioId: true,
     checklist: [
       { label: "Facebook Page" },
