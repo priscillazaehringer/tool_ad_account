@@ -6,7 +6,7 @@ import {
   STEPS,
   RAIL_LABELS,
   TOTAL_STEPS,
-  BUSINESS_MANAGER_ID,
+  BUSINESS_PORTFOLIO_ID,
   VIDEOS,
   type ActionStep,
   type Interstitial,
@@ -198,7 +198,9 @@ export function WizardClient({ id }: { id: string | null }) {
     <div className="mx-auto min-h-screen w-full max-w-5xl px-6 py-12 sm:py-16">
       <div className="grid gap-10 md:grid-cols-[220px_1fr] md:gap-14">
         <aside className="md:sticky md:top-16 md:self-start">
-          <ProgressRail labels={RAIL_LABELS} current={step} />
+          {/* The prerequisite is screen 1 and isn't in the rail, so the rail's
+              active index is step - 1 (0 during the prerequisite). */}
+          <ProgressRail labels={RAIL_LABELS} current={step - 1} />
         </aside>
 
         <main className="min-w-0">
@@ -307,10 +309,34 @@ function ActionView({
         <VideoEmbed url={VIDEOS[step.video]} />
       </div>
 
-      {step.showManagerId && (
+      {step.showPortfolioId && (
         <div className="mt-6">
-          <p className="eyebrow mb-2">Our Business Manager ID</p>
-          <CopyButton value={BUSINESS_MANAGER_ID} />
+          <p className="eyebrow mb-2">Our Business Portfolio ID</p>
+          <CopyButton value={BUSINESS_PORTFOLIO_ID} />
+        </div>
+      )}
+
+      {step.checklist && step.checklist.length > 0 && (
+        <div className="mt-6">
+          <p className="eyebrow mb-3">Grant us access to</p>
+          <ul className="space-y-2">
+            {step.checklist.map((item) => (
+              <li
+                key={item.label}
+                className="flex items-center gap-3 font-body text-base text-ink/80"
+              >
+                <span aria-hidden className="shrink-0 text-lg text-coral">
+                  ☑
+                </span>
+                <span>
+                  {item.label}
+                  {item.note && (
+                    <span className="text-ink/50"> — {item.note}</span>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 

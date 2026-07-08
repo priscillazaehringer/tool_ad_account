@@ -5,9 +5,11 @@ through everything Facebook, Instagram and Meta need on their end — setting up
 Business Page, connecting Instagram, creating a real ad account, and granting
 our team partner access — so we can run ads for them.
 
-Clients land on a page, enter their name and email, and move through seven
-branching steps (Facebook account → Business Page → Instagram → ad account →
-Business Portfolio → add our team to the Page → add our team to the ad account). Progress saves to Supabase after every action, so they can
+Clients land on a page, enter their name and email, answer a Business Portfolio
+prerequisite, then move through five branching steps (Facebook Account →
+Business Page → Instagram → Ad Account → Invite Our Team). The final step has
+them invite our Business Portfolio as a partner once and grant access to all the
+assets we need, matching Meta's current permissions model. Progress saves to Supabase after every action, so they can
 close the tab and resume later by re-entering the same email and last name. When
 they finish, a notification email fires to the admin inbox via Resend.
 
@@ -30,7 +32,7 @@ variables set — clients only initialise when an API route is actually called.
 src/
   app/
     page.tsx              Landing / entry page
-    wizard/page.tsx       The seven-step wizard
+    wizard/page.tsx       The wizard (portfolio prerequisite + 5 steps)
     complete/page.tsx     Completion page
     api/
       start/route.ts      Create or look up a client record
@@ -184,6 +186,6 @@ line with an `<img>`.
 ## Editing the questions and copy
 
 Everything the wizard says — step titles, answer options, helper text, branching
-interstitials, action-step copy, and our Business Manager ID
+interstitials, action-step copy, and our Business Portfolio ID
 (`483230735518997`) — is defined in `src/lib/steps.ts`. That's the only file you
 need to touch to change wording or the flow.

@@ -1,44 +1,46 @@
 // ---------------------------------------------------------------------------
-// Single source of truth for the wizard: questions, options, helper text,
-// action-step copy, and the video embed URLs.
+// Single source of truth for the wizard: the Business Portfolio prerequisite,
+// the numbered asset steps, options, helper text, and the video embed URLs.
 //
-// To wire in real videos later, drop your embed URLs into the VIDEOS map
-// below. Any embeddable URL works — Vimeo, unlisted YouTube, or Loom. Use the
-// *embed* form of the URL, for example:
-//   Vimeo:   https://player.vimeo.com/video/123456789
-//   YouTube: https://www.youtube.com/embed/VIDEO_ID
-//   Loom:    https://www.loom.com/embed/VIDEO_ID  (NOT the /share/ form)
+// Flow shape:
+//   Prerequisite  — Do you have a Business Portfolio? (not numbered, not in rail)
+//   Step 1 of 5   — Facebook Account
+//   Step 2 of 5   — Business Page
+//   Step 3 of 5   — Instagram
+//   Step 4 of 5   — Ad Account
+//   Step 5 of 5   — Invite Our Team  (one combined partner-access step)
+//
+// To wire in videos, drop *embed* URLs into the VIDEOS map. Any embeddable URL
+// works — Vimeo, unlisted YouTube, or Loom. Use the embed form, e.g.
+//   Loom: https://www.loom.com/embed/VIDEO_ID   (NOT the /share/ form)
 // Leave a value as null to show a "video coming soon" placeholder.
 // ---------------------------------------------------------------------------
 
-/** Our team's Meta Business Manager ID — clients paste this to grant access. */
-export const BUSINESS_MANAGER_ID = "483230735518997";
+/** Our team's Meta Business Portfolio ID — clients invite this as a Partner. */
+export const BUSINESS_PORTFOLIO_ID = "483230735518997";
 
 export type VideoKey =
+  | "businessPortfolio"
   | "businessPage"
   | "instagram"
   | "adAccount"
-  | "businessPortfolio"
-  | "addTeamToPage"
-  | "addTeamToAdAccount";
+  | "inviteTeam";
 
-/** Real Loom embed URLs. Note: Loom /share/ links must use the /embed/ form. */
 export const VIDEOS: Record<VideoKey, string | null> = {
-  // Step 2 — creating a Facebook Business Page
+  // Prerequisite — how to create a Business Portfolio (optional video).
+  businessPortfolio: null,
+  // Step 1 — creating a Facebook Business Page
   businessPage: "https://www.loom.com/embed/a4c80266e542481d8a6523ebca76f7d6",
   // Step 3 — connecting Instagram to the Page
   instagram: "https://www.loom.com/embed/2a2946a15e1f427aa8755c0efae7cdd8",
   // Step 4 — creating a real ad account
   adAccount: "https://www.loom.com/embed/635484e93e834d729cc964e0f750a5cc",
-  // Step 5 — creating a Business Portfolio (no video yet — step uses text
-  // instructions until a walkthrough is recorded; add the embed URL here and
-  // switch the step's interstitial to { type: "video" } to use it).
-  businessPortfolio: null,
-  // Step 6 — adding our team to the Page
-  addTeamToPage: "https://www.loom.com/embed/a1f6badc8b744e82b4ad49c71dd1414a",
-  // Step 7 — adding our team to the ad account
-  addTeamToAdAccount:
-    "https://www.loom.com/embed/c8c025f73680401b8c98bd777cfb5bd4",
+  // Step 5 — inviting our Business Portfolio as a partner and selecting assets.
+  // Needs one combined walkthrough. Two older single-asset recordings exist and
+  // can be reused if helpful:
+  //   Facebook page access:    https://www.loom.com/embed/a1f6badc8b744e82b4ad49c71dd1414a
+  //   Grant ad account access: https://www.loom.com/embed/c8c025f73680401b8c98bd777cfb5bd4
+  inviteTeam: null,
 };
 
 export type Interstitial =
@@ -48,21 +50,26 @@ export type Interstitial =
 export interface QuestionOption {
   value: string;
   label: string;
-  /** Shown after the option is chosen, before advancing to the next step. */
+  /** Shown after the option is chosen, before advancing to the next screen. */
   interstitial?: Interstitial;
 }
 
 export type AnswerColumn =
-  | "q1_answer"
-  | "q2_answer"
-  | "q3_answer"
-  | "q4_answer"
-  | "q5_answer";
+  | "q1_answer" // Facebook Account
+  | "q2_answer" // Business Page
+  | "q3_answer" // Instagram
+  | "q4_answer" // Ad Account
+  | "q5_answer"; // Business Portfolio (prerequisite)
 export type CompletedColumn = "q6_completed_at" | "q7_completed_at";
+
+export interface ChecklistItem {
+  label: string;
+  note?: string;
+}
 
 export interface QuestionStep {
   kind: "question";
-  index: number; // 1-based position in the flow
+  index: number; // internal 1-based position (prerequisite = 1)
   answerColumn: AnswerColumn;
   eyebrow: string;
   title: string;
@@ -78,7 +85,8 @@ export interface ActionStep {
   title: string;
   body: string[];
   video: VideoKey;
-  showManagerId: boolean;
+  showPortfolioId: boolean;
+  checklist?: ChecklistItem[];
   warning?: string;
   confirmLabel: string;
 }
@@ -99,11 +107,54 @@ export const COMPLETED_COLUMNS: CompletedColumn[] = [
 ];
 
 export const STEPS: Step[] = [
+  // -------------------------------------------------------------------------
+  // Prerequisite — Business Portfolio. Not numbered; not shown in the rail.
+  // -------------------------------------------------------------------------
   {
     kind: "question",
     index: 1,
+    answerColumn: "q5_answer",
+    eyebrow: "Before we start",
+    title: "Do you already have a Meta Business Portfolio?",
+    helper:
+      "A Meta Business Portfolio is where Meta stores your Facebook Page, Instagram account, ad account, Pixel, and permissions. If you've run Meta ads before or hired someone to manage your Facebook Page, you may already have one.",
+    options: [
+      { value: "yes", label: "Yes, I already have one" },
+      {
+        value: "unsure",
+        label: "I'm not sure",
+        interstitial: {
+          type: "text",
+          heading: "How to check if you already have one",
+          body: [
+            "Go to business.facebook.com. If you land in a Business settings dashboard — rather than being prompted to create something — you already have a portfolio.",
+            "You'll see its name in the top-left, with menus for Accounts, Pages, and Ad accounts.",
+            'Found one? Come back and choose "Yes." If there\'s nothing there, go back and choose "No" and we\'ll help you create it.',
+          ],
+        },
+      },
+      {
+        value: "no",
+        label: "No, I don't have one",
+        interstitial: {
+          type: "text",
+          heading: "Create your Business Portfolio",
+          body: [
+            "Go to business.facebook.com and create a Business Portfolio — just add your business name, your name, and your email. It's free and takes about a minute.",
+            "That's all you need for now. Once it's created, come back and continue — you'll set up your Page, Instagram, and ad account inside it in the next steps.",
+          ],
+        },
+      },
+    ],
+  },
+  // -------------------------------------------------------------------------
+  // Numbered asset steps.
+  // -------------------------------------------------------------------------
+  {
+    kind: "question",
+    index: 2,
     answerColumn: "q1_answer",
-    eyebrow: "Step 1 of 7",
+    eyebrow: "Step 1 of 5",
     title: "Do you have a personal Facebook account?",
     options: [
       { value: "yes", label: "Yes, I have one" },
@@ -124,9 +175,9 @@ export const STEPS: Step[] = [
   },
   {
     kind: "question",
-    index: 2,
+    index: 3,
     answerColumn: "q2_answer",
-    eyebrow: "Step 2 of 7",
+    eyebrow: "Step 2 of 5",
     title: "Do you have a Facebook Business Page?",
     options: [
       { value: "yes", label: "Yes, I have a Page" },
@@ -146,9 +197,9 @@ export const STEPS: Step[] = [
   },
   {
     kind: "question",
-    index: 3,
+    index: 4,
     answerColumn: "q3_answer",
-    eyebrow: "Step 3 of 7",
+    eyebrow: "Step 3 of 5",
     title: "Is your Instagram connected to your Page?",
     options: [
       { value: "yes", label: "Yes, it's connected" },
@@ -169,9 +220,9 @@ export const STEPS: Step[] = [
   },
   {
     kind: "question",
-    index: 4,
+    index: 5,
     answerColumn: "q4_answer",
-    eyebrow: "Step 4 of 7",
+    eyebrow: "Step 4 of 5",
     title: "Do you have a Meta ad account you've used for real campaigns?",
     helper:
       "Boosting an Instagram post doesn't count. That creates a hidden ad account we can't really work with. If you've only ever boosted posts, choose No.",
@@ -192,70 +243,36 @@ export const STEPS: Step[] = [
     ],
   },
   {
-    kind: "question",
-    index: 5,
-    answerColumn: "q5_answer",
-    eyebrow: "Step 5 of 7",
-    title: "Do you have a Meta Business Portfolio?",
-    helper:
-      "Your Business Portfolio (you may see it called “Business Manager” or “Business settings”) is the free hub that holds your Page and ad account in one place. It's what lets you add our team as a partner in the next two steps. If you've never set one up, choose No — it only takes a minute.",
-    options: [
-      { value: "yes", label: "Yes, I have one" },
-      {
-        value: "no_unsure",
-        label: "No / Not sure",
-        interstitial: {
-          type: "text",
-          heading: "Create your Business Portfolio",
-          body: [
-            "Go to business.facebook.com and, if prompted, create a Business Portfolio — just add your business name, your name, and your email.",
-            "Then add the Facebook Page and the ad account you set up earlier: Business settings → Accounts → Pages / Ad accounts → Add.",
-            "Once your Page and ad account both show inside your portfolio, come back and continue.",
-          ],
-        },
-      },
-    ],
-  },
-  {
     kind: "action",
     index: 6,
     completedColumn: "q6_completed_at",
-    eyebrow: "Step 6 of 7",
-    title: "Add our team to your Page",
+    eyebrow: "Step 5 of 5",
+    title: "Invite our team",
     body: [
-      "Now we connect. Watch the walkthrough, then add us as a partner on your Business Page using the ID below.",
-      "When Facebook asks which Business Manager you want to give access to, paste this ID:",
+      "Last step. Instead of adding us to each asset separately, you'll invite our Business Portfolio as a Partner once and grant access to everything we need.",
+      "In your Business settings, add a Partner using the ID below, then select the assets on the checklist. The walkthrough shows exactly where everything is.",
     ],
-    video: "addTeamToPage",
-    showManagerId: true,
-    confirmLabel: "I've added your team to my Page",
-  },
-  {
-    kind: "action",
-    index: 7,
-    completedColumn: "q7_completed_at",
-    eyebrow: "Step 7 of 7",
-    title: "Add our team to your ad account",
-    body: [
-      "Same idea as the last step, but for your ad account this time. Watch the walkthrough, then grant us partner access using the ID below.",
+    video: "inviteTeam",
+    showPortfolioId: true,
+    checklist: [
+      { label: "Facebook Page" },
+      { label: "Ad Account" },
+      { label: "Instagram", note: "if connected" },
+      { label: "Pixel", note: "if one exists" },
     ],
-    video: "addTeamToAdAccount",
-    showManagerId: true,
     warning:
-      "If you see more than one ad account, choose the one you just created. Picking the wrong one is the most common mistake here.",
-    confirmLabel: "I've added your team to my ad account",
+      "If you see more than one ad account, choose the one you use for real campaigns. Picking the wrong one is the most common mistake here.",
+    confirmLabel: "I've invited your team",
   },
 ];
 
 export const TOTAL_STEPS = STEPS.length;
 
-/** Short labels for the vertical progress rail. */
+/** Short labels for the vertical progress rail (numbered steps only). */
 export const RAIL_LABELS = [
-  "Facebook account",
+  "Facebook Account",
   "Business Page",
   "Instagram",
-  "Ad account",
-  "Business Portfolio",
-  "Add us to your Page",
-  "Add us to your ad account",
+  "Ad Account",
+  "Invite Our Team",
 ];
