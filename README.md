@@ -135,6 +135,48 @@ form of the URL (e.g. `player.vimeo.com/video/…`, `youtube.com/embed/…`,
 `loom.com/embed/…`). Leave a value as `null` to keep the placeholder until the
 video is ready.
 
+## Branding
+
+The design uses Whitney Bateson's brand palette, defined once in
+[`tailwind.config.ts`](./tailwind.config.ts):
+
+| Token | Hex | Use |
+| --- | --- | --- |
+| `cream` / `paper` | `#efeae3` | Page background |
+| `teal` / `ink` | `#02525d` | Text / dark anchor |
+| `coral` | `#ff7f50` | Accent — buttons, active markers |
+| `sky` | `#aed3dd` | Light blue (info) |
+| `pink` | `#ffcdcd` | Soft pink |
+| `lime` | `#e3f696` | Pale lime |
+| `alert` | `#b23a1f` | Errors / warnings (functional, not a brand colour) |
+
+### Fonts (licensed — needs one activation step)
+
+The brand fonts are **Boston Angel** (display/headings), **Proxima Nova** (body)
+and **Milkshake Script** (handwritten accents). These are licensed and are *not*
+bundled in the repo. Until they're activated, the layout falls back to close
+stand-ins loaded in [`src/app/layout.tsx`](./src/app/layout.tsx) — Playfair
+Display, Montserrat and Caveat — so it already looks intentional.
+
+The licensed family names are first in each font stack (see
+[`src/app/globals.css`](./src/app/globals.css)), so they take over automatically
+once the browser can load them. Activate them **one** of two ways:
+
+- **Adobe Fonts (recommended):** create/copy Whitney's Adobe Fonts web project
+  (Proxima Nova lives there; add Boston Angel and Milkshake to the same kit if
+  licensed), then paste the kit `<link>` into `layout.tsx` where the comment
+  points. Nothing else to change.
+- **Self-host:** drop the `.woff2` files into [`public/fonts/`](./public/fonts)
+  and uncomment the `@font-face` blocks at the bottom of `globals.css`
+  (filenames are pre-stubbed to match).
+
+### Logo
+
+The pages currently show "Whitney Bateson" set in the script font as a stand-in
+wordmark (landing + completion). To use her real logo, drop the file into
+`public/` and replace that `<p className="font-script …">Whitney Bateson</p>`
+line with an `<img>`.
+
 ## Editing the questions and copy
 
 Everything the wizard says — step titles, answer options, helper text, branching

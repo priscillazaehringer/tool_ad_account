@@ -2,11 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------------------------------------------------------------------------
+   Whitney Bateson brand fonts.
+
+   Boston Angel (display), Proxima Nova (body) and Milkshake Script (accents)
+   are LICENSED fonts and are not bundled here. Until they're activated the
+   stacks below fall back to close stand-ins loaded in layout.tsx (Playfair
+   Display, Montserrat, Caveat) so the layout still looks intentional.
+
+   To activate the real fonts, do ONE of the following:
+
+   A) Adobe Fonts (recommended for Proxima Nova, and Boston Angel if her kit
+      includes it): add the kit <link> in layout.tsx — see the note there.
+
+   B) Self-host: drop woff2 files into /public/fonts and uncomment the
+      @font-face blocks at the bottom of this file.
+
+   Either way, the licensed family names are already first in each stack, so
+   they win automatically once the browser can load them.
+--------------------------------------------------------------------------- */
 :root {
-  /* Font stacks are loaded via <link> in the root layout and exposed here as
-     variables so Tailwind's fontFamily tokens can reference them. */
-  --font-fraunces: "Fraunces", Georgia, "Times New Roman", serif;
-  --font-inter: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Boston Angel", "Playfair Display", Georgia, "Times New Roman",
+    serif;
+  --font-body: "Proxima Nova", "Montserrat", system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-script: "Milkshake", "Caveat", "Brush Script MT", cursive;
 }
 
 @layer base {
@@ -18,18 +38,19 @@
 @layer components {
   /* Uppercase small-caps label with wide tracking. */
   .eyebrow {
-    @apply font-body text-[0.72rem] font-semibold uppercase tracking-label text-moss;
+    @apply font-body text-[0.72rem] font-semibold uppercase tracking-label text-ink/70;
   }
 
   /* Square-cornered, no-radius button base. */
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-none border px-6 py-3
-           font-body text-sm font-medium transition-colors duration-150
+           font-body text-sm font-semibold transition-colors duration-150
            disabled:cursor-not-allowed disabled:opacity-50;
   }
 
+  /* Primary CTA — coral fill with deep-teal text (her brand pairing). */
   .btn-primary {
-    @apply btn border-moss bg-moss text-paper hover:bg-ink hover:border-ink;
+    @apply btn border-coral bg-coral text-ink hover:bg-ink hover:border-ink hover:text-paper;
   }
 
   .btn-outline {
@@ -43,6 +64,36 @@
   .field-input {
     @apply w-full rounded-none border border-ink/20 bg-transparent px-4 py-3
            font-body text-base text-ink outline-none
-           placeholder:text-ink/35 focus:border-moss;
+           placeholder:text-ink/35 focus:border-coral;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Self-hosting the licensed fonts (Option B). Add the woff2 files to
+   /public/fonts, then uncomment. Filenames are examples — match your files.
+
+@font-face {
+  font-family: "Boston Angel";
+  src: url("/fonts/boston-angel.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/fonts/proxima-nova-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/fonts/proxima-nova-semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Milkshake";
+  src: url("/fonts/milkshake.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+--------------------------------------------------------------------------- */

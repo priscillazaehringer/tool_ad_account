@@ -87,7 +87,7 @@ export function EntryForm() {
       </div>
 
       {error && (
-        <p className="font-body text-sm text-clay" role="alert">
+        <p className="font-body text-sm text-alert" role="alert">
           {error}
         </p>
       )}

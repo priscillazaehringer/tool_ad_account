@@ -16,7 +16,19 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Fonts loaded via <link> rather than next/font so the build never
-            needs network access to succeed. */}
+            needs network access to succeed.
+
+            These are FALLBACKS that approximate Whitney's licensed brand fonts
+            until the real ones are activated:
+              Playfair Display  ~ Boston Angel   (display / headings)
+              Montserrat        ~ Proxima Nova   (body)
+              Caveat            ~ Milkshake       (handwritten accents)
+
+            To activate the real fonts via Adobe Fonts, add her web-project kit
+            here, e.g.:
+              <link rel="stylesheet" href="https://use.typekit.net/XXXXXXX.css" />
+            The licensed family names are already first in each stack (see
+            globals.css), so they take over automatically once loaded. */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -24,7 +36,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Caveat:wght@400;600&display=swap"
           rel="stylesheet"
         />
       </head>

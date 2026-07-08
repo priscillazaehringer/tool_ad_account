@@ -1,7 +1,13 @@
 export default function CompletePage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-2xl flex-col justify-center px-6 py-16">
-      <p className="eyebrow mb-6">All done</p>
+      <p className="mb-8 font-script text-3xl leading-none text-ink">
+        Whitney Bateson
+      </p>
+
+      <p className="eyebrow mb-4">All done</p>
+
+      <p className="mb-2 font-script text-2xl text-ink/80">Nice work —</p>
 
       <h1 className="font-display text-4xl font-medium leading-[1.05] text-ink sm:text-5xl">
         That&apos;s everything on your end.

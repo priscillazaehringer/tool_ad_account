@@ -3,6 +3,11 @@ import { EntryForm } from "@/components/EntryForm";
 export default function LandingPage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-2xl flex-col justify-center px-6 py-16">
+      {/* Script wordmark — a stand-in brand mark until a real logo is added. */}
+      <p className="mb-8 font-script text-3xl leading-none text-ink">
+        Whitney Bateson
+      </p>
+
       <p className="eyebrow mb-6">Done-for-You Funnel · Meta setup</p>
 
       <h1 className="font-display text-4xl font-medium leading-[1.05] text-ink sm:text-5xl">

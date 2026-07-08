@@ -197,7 +197,7 @@ export function WizardClient({ id }: { id: string | null }) {
           )}
 
           {error && (
-            <p className="mt-6 font-body text-sm text-clay" role="alert">
+            <p className="mt-6 font-body text-sm text-alert" role="alert">
               {error}
             </p>
           )}
@@ -223,7 +223,7 @@ function QuestionView({
         {step.title}
       </h1>
       {step.helper && (
-        <p className="mt-5 border-l-2 border-moss/40 pl-4 font-body text-sm leading-relaxed text-ink/70">
+        <p className="mt-5 border-l-2 border-coral pl-4 font-body text-sm leading-relaxed text-ink/75">
           {step.helper}
         </p>
       )}
@@ -279,7 +279,7 @@ function ActionView({
       )}
 
       {step.warning && (
-        <p className="mt-6 border-l-2 border-clay pl-4 font-body text-sm leading-relaxed text-clay">
+        <p className="mt-6 border-l-2 border-alert pl-4 font-body text-sm leading-relaxed text-alert">
           {step.warning}
         </p>
       )}

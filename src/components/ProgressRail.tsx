@@ -26,9 +26,9 @@ export function ProgressRail({
                 className={[
                   "relative z-10 mt-1 block h-[15px] w-[15px] shrink-0 rounded-full border-2",
                   state === "done"
-                    ? "border-moss bg-moss"
+                    ? "border-coral bg-coral"
                     : state === "active"
-                      ? "border-moss bg-paper"
+                      ? "border-coral bg-paper"
                       : "border-ink/25 bg-paper",
                 ].join(" ")}
               />
