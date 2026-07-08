@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Font stacks are loaded via <link> in the root layout and exposed here as
+     variables so Tailwind's fontFamily tokens can reference them. */
+  --font-fraunces: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-inter: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+  }
+}
+
+@layer components {
+  /* Uppercase small-caps label with wide tracking. */
+  .eyebrow {
+    @apply font-body text-[0.72rem] font-semibold uppercase tracking-label text-moss;
+  }
+
+  /* Square-cornered, no-radius button base. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-none border px-6 py-3
+           font-body text-sm font-medium transition-colors duration-150
+           disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn border-moss bg-moss text-paper hover:bg-ink hover:border-ink;
+  }
+
+  .btn-outline {
+    @apply btn border-ink/25 bg-transparent text-ink hover:border-ink hover:bg-ink/[0.04];
+  }
+
+  .field-label {
+    @apply eyebrow mb-2 block;
+  }
+
+  .field-input {
+    @apply w-full rounded-none border border-ink/20 bg-transparent px-4 py-3
+           font-body text-base text-ink outline-none
+           placeholder:text-ink/35 focus:border-moss;
+  }
+}
