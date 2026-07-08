@@ -21,13 +21,19 @@ export type VideoKey =
   | "addTeamToPage"
   | "addTeamToAdAccount";
 
-/** Drop real embed URLs here when they're ready. */
+/** Real Loom embed URLs. Note: Loom /share/ links must use the /embed/ form. */
 export const VIDEOS: Record<VideoKey, string | null> = {
-  businessPage: null, // Step 2 — creating a Facebook Business Page
-  instagram: null, // Step 3 — connecting Instagram to the Page
-  adAccount: null, // Step 4 — creating a real ad account
-  addTeamToPage: null, // Step 5 — adding our team to the Page
-  addTeamToAdAccount: null, // Step 6 — adding our team to the ad account
+  // Step 2 — creating a Facebook Business Page
+  businessPage: "https://www.loom.com/embed/a4c80266e542481d8a6523ebca76f7d6",
+  // Step 3 — connecting Instagram to the Page
+  instagram: "https://www.loom.com/embed/2a2946a15e1f427aa8755c0efae7cdd8",
+  // Step 4 — creating a real ad account
+  adAccount: "https://www.loom.com/embed/635484e93e834d729cc964e0f750a5cc",
+  // Step 5 — adding our team to the Page
+  addTeamToPage: "https://www.loom.com/embed/a1f6badc8b744e82b4ad49c71dd1414a",
+  // Step 6 — adding our team to the ad account
+  addTeamToAdAccount:
+    "https://www.loom.com/embed/c8c025f73680401b8c98bd777cfb5bd4",
 };
 
 export type Interstitial =
