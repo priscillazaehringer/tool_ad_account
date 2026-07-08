@@ -4,9 +4,9 @@
 //
 // Flow shape (6 numbered steps):
 //   Step 1 of 6   — Facebook Account
-//   Step 2 of 6   — Business Page
-//   Step 3 of 6   — Instagram
-//   Step 4 of 6   — Business Portfolio
+//   Step 2 of 6   — Business Portfolio  (the container everything lives in)
+//   Step 3 of 6   — Business Page
+//   Step 4 of 6   — Instagram
 //   Step 5 of 6   — Ad Account
 //   Step 6 of 6   — Invite Our Team  (one combined partner-access step)
 //
@@ -20,24 +20,24 @@
 export const BUSINESS_PORTFOLIO_ID = "483230735518997";
 
 export type VideoKey =
-  | "businessPage"
-  | "instagram"
   | "businessPortfolioCheck"
   | "businessPortfolio"
+  | "businessPage"
+  | "instagram"
   | "adAccount"
   | "inviteTeam";
 
 export const VIDEOS: Record<VideoKey, string | null> = {
-  // Step 2 — creating a Facebook Business Page
-  businessPage: "https://www.loom.com/embed/a4c80266e542481d8a6523ebca76f7d6",
-  // Step 3 — connecting Instagram to the Page
-  instagram: "https://www.loom.com/embed/2a2946a15e1f427aa8755c0efae7cdd8",
-  // Step 4 — how to check whether you already have a Business Portfolio
+  // Step 2 — how to check whether you already have a Business Portfolio
   businessPortfolioCheck:
     "https://www.loom.com/embed/71c79f90157e405d957db285588156ed",
-  // Step 4 — creating a Business Portfolio
+  // Step 2 — creating a Business Portfolio
   businessPortfolio:
     "https://www.loom.com/embed/9a4e8b6ae1604788b7c9b1afb12712f5",
+  // Step 3 — creating a Facebook Business Page
+  businessPage: "https://www.loom.com/embed/a4c80266e542481d8a6523ebca76f7d6",
+  // Step 4 — connecting Instagram to the Page
+  instagram: "https://www.loom.com/embed/2a2946a15e1f427aa8755c0efae7cdd8",
   // Step 5 — creating a real ad account
   adAccount: "https://www.loom.com/embed/635484e93e834d729cc964e0f750a5cc",
   // Step 6 — inviting our Business Portfolio as a partner and selecting assets.
@@ -138,56 +138,11 @@ export const STEPS: Step[] = [
   {
     kind: "question",
     index: 2,
-    answerColumn: "q2_answer",
-    eyebrow: "Step 2 of 6",
-    title: "Do you have a Facebook Business Page?",
-    options: [
-      { value: "yes", label: "Yes, I have a Page" },
-      {
-        value: "no_unsure",
-        label: "No / Not sure",
-        interstitial: {
-          type: "video",
-          video: "businessPage",
-          heading: "Let's set up your Business Page",
-          body: [
-            "Watch this short walkthrough to create your Business Page, then continue.",
-          ],
-        },
-      },
-    ],
-  },
-  {
-    kind: "question",
-    index: 3,
-    answerColumn: "q3_answer",
-    eyebrow: "Step 3 of 6",
-    title: "Is your Instagram connected to your Page?",
-    options: [
-      { value: "yes", label: "Yes, it's connected" },
-      {
-        value: "no",
-        label: "No, not yet",
-        interstitial: {
-          type: "video",
-          video: "instagram",
-          heading: "Connect Instagram to your Page",
-          body: [
-            "This short video walks through linking your Instagram account to your Facebook Page. Do that, then continue.",
-          ],
-        },
-      },
-      { value: "no_instagram", label: "I don't use Instagram" },
-    ],
-  },
-  {
-    kind: "question",
-    index: 4,
     answerColumn: "q5_answer",
-    eyebrow: "Step 4 of 6",
+    eyebrow: "Step 2 of 6",
     title: "Do you have a Meta Business Portfolio?",
     helper:
-      "A Meta Business Portfolio is where Meta stores your Facebook Page, Instagram account, ad account, Pixel, and permissions. If you've run Meta ads before or hired someone to manage your Facebook Page, you may already have one.",
+      "A Meta Business Portfolio is where Meta stores your Facebook Page, Instagram account, ad account, Pixel, and permissions. It's the container everything else lives in — so we set it up first. If you've run Meta ads before or hired someone to manage your Facebook Page, you may already have one.",
     options: [
       { value: "yes", label: "Yes, I already have one" },
       {
@@ -211,10 +166,55 @@ export const STEPS: Step[] = [
           video: "businessPortfolio",
           heading: "Create your Business Portfolio",
           body: [
-            "This walkthrough shows how to create your Business Portfolio and add your Page and Instagram to it. Set it up, then continue.",
+            "This walkthrough shows how to create your Business Portfolio. Set it up, then continue — you'll create your Page, Instagram, and ad account inside it in the next steps.",
           ],
         },
       },
+    ],
+  },
+  {
+    kind: "question",
+    index: 3,
+    answerColumn: "q2_answer",
+    eyebrow: "Step 3 of 6",
+    title: "Do you have a Facebook Business Page?",
+    options: [
+      { value: "yes", label: "Yes, I have a Page" },
+      {
+        value: "no_unsure",
+        label: "No / Not sure",
+        interstitial: {
+          type: "video",
+          video: "businessPage",
+          heading: "Let's set up your Business Page",
+          body: [
+            "Watch this short walkthrough to create your Business Page, then continue.",
+          ],
+        },
+      },
+    ],
+  },
+  {
+    kind: "question",
+    index: 4,
+    answerColumn: "q3_answer",
+    eyebrow: "Step 4 of 6",
+    title: "Is your Instagram connected to your Page?",
+    options: [
+      { value: "yes", label: "Yes, it's connected" },
+      {
+        value: "no",
+        label: "No, not yet",
+        interstitial: {
+          type: "video",
+          video: "instagram",
+          heading: "Connect Instagram to your Page",
+          body: [
+            "This short video walks through linking your Instagram account to your Facebook Page. Do that, then continue.",
+          ],
+        },
+      },
+      { value: "no_instagram", label: "I don't use Instagram" },
     ],
   },
   {
@@ -272,9 +272,9 @@ export const TOTAL_STEPS = STEPS.length;
 /** Short labels for the vertical progress rail. */
 export const RAIL_LABELS = [
   "Facebook Account",
+  "Business Portfolio",
   "Business Page",
   "Instagram",
-  "Business Portfolio",
   "Ad Account",
   "Invite Our Team",
 ];

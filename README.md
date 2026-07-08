@@ -6,10 +6,11 @@ Business Page, connecting Instagram, creating a real ad account, and granting
 our team partner access — so we can run ads for them.
 
 Clients land on a page, enter their name and email, then move through six
-branching steps (Facebook Account → Business Page → Instagram → Business
-Portfolio → Ad Account → Invite Our Team). The final step has them invite our
-Business Portfolio as a partner once and grant access to all the assets we need,
-matching Meta's current permissions model. Progress saves to Supabase after every action, so they can
+branching steps (Facebook Account → Business Portfolio → Business Page →
+Instagram → Ad Account → Invite Our Team). The Business Portfolio comes first as
+the container everything else is created inside. The final step has them invite
+our Business Portfolio as a partner once and grant access to all the assets we
+need, matching Meta's current permissions model. Progress saves to Supabase after every action, so they can
 close the tab and resume later by re-entering the same email and last name. When
 they finish, a notification email fires to the admin inbox via Resend.
 

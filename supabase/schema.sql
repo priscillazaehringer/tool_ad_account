@@ -17,10 +17,10 @@ create table if not exists public.meta_setup (
   first_name        text,
   current_step      int not null default 1,
   q1_answer         text,          -- Step 1: Personal Facebook account?
-  q2_answer         text,          -- Step 2: Facebook Business Page?
-  q3_answer         text,          -- Step 3: Instagram connected to Page?
+  q2_answer         text,          -- Step 3: Facebook Business Page?
+  q3_answer         text,          -- Step 4: Instagram connected to Page?
   q4_answer         text,          -- Step 5: Ad account used for real campaigns?
-  q5_answer         text,          -- Step 4: Business Portfolio?
+  q5_answer         text,          -- Step 2: Business Portfolio?
   q6_completed_at   timestamptz,   -- Step 6: Invited our team (partner access)
   q7_completed_at   timestamptz,   -- (unused — reserved)
   completed_at      timestamptz,
