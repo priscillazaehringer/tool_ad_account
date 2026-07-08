@@ -22,6 +22,7 @@ export const BUSINESS_PORTFOLIO_ID = "483230735518997";
 export type VideoKey =
   | "businessPage"
   | "instagram"
+  | "businessPortfolioCheck"
   | "businessPortfolio"
   | "adAccount"
   | "inviteTeam";
@@ -31,6 +32,9 @@ export const VIDEOS: Record<VideoKey, string | null> = {
   businessPage: "https://www.loom.com/embed/a4c80266e542481d8a6523ebca76f7d6",
   // Step 3 — connecting Instagram to the Page
   instagram: "https://www.loom.com/embed/2a2946a15e1f427aa8755c0efae7cdd8",
+  // Step 4 — how to check whether you already have a Business Portfolio
+  businessPortfolioCheck:
+    "https://www.loom.com/embed/71c79f90157e405d957db285588156ed",
   // Step 4 — creating a Business Portfolio
   businessPortfolio:
     "https://www.loom.com/embed/9a4e8b6ae1604788b7c9b1afb12712f5",
@@ -190,12 +194,12 @@ export const STEPS: Step[] = [
         value: "unsure",
         label: "I'm not sure",
         interstitial: {
-          type: "text",
+          type: "video",
+          video: "businessPortfolioCheck",
           heading: "How to check if you already have one",
           body: [
-            "Go to business.facebook.com. If you land in a Business settings dashboard — rather than being prompted to create something — you already have a portfolio.",
-            "You'll see its name in the top-left, with menus for Accounts, Pages, and Ad accounts.",
-            'Found one? Come back and choose "Yes." If there\'s nothing there, go back and choose "No" and we\'ll walk you through creating it.',
+            "Watch this quick video to see how to check whether you already have a Business Portfolio.",
+            "Once you know, hit Back and choose Yes or No.",
           ],
         },
       },
