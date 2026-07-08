@@ -68,8 +68,8 @@ export function HelpWidget({
           {status === "sent" ? (
             <div>
               <p className="font-body text-sm leading-relaxed text-ink/80">
-                Got it — thanks! We&apos;ll follow up by email. You can keep
-                going in the meantime.
+                Got it — thanks! Priscilla will get back to you within 24 hours
+                to help you troubleshoot. You can keep going in the meantime.
               </p>
               <button
                 type="button"
@@ -83,7 +83,8 @@ export function HelpWidget({
             <form onSubmit={submit}>
               <p className="mb-3 font-body text-xs leading-relaxed text-ink/55">
                 On: <span className="text-ink/80">{stepLabel}</span>. Ask
-                anything and we&apos;ll get back to you.
+                anything — Priscilla will get back to you within 24 hours to help
+                you troubleshoot.
               </p>
               <textarea
                 value={question}
