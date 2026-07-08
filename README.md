@@ -183,6 +183,16 @@ wordmark (landing + completion). To use her real logo, drop the file into
 `public/` and replace that `<p className="font-script …">Whitney Bateson</p>`
 line with an `<img>`.
 
+## Help requests ("Need help?" widget)
+
+Every wizard screen has a floating **Need help?** button. When a client asks a
+question, it's saved to the `help_requests` table in Supabase with the step they
+were on and their name/email attached — no AI, no email needed. Review them in
+**Table Editor → `help_requests`** (newest first).
+
+If you set up the database before this feature existed, run
+[`supabase/migrations/0002_add_help_requests.sql`](./supabase/migrations) once.
+
 ## Editing the questions and copy
 
 Everything the wizard says — step titles, answer options, helper text, branching

@@ -50,3 +50,24 @@ create trigger meta_setup_set_updated_at
 -- Enable RLS with NO policies. The service role key used server-side bypasses
 -- RLS, so the API keeps working; anon/authenticated clients get nothing.
 alter table public.meta_setup enable row level security;
+
+-- ---------------------------------------------------------------------------
+-- help_requests — questions clients ask from the "Need help?" widget, with the
+-- step they were on and their name/email copied in for easy review.
+-- ---------------------------------------------------------------------------
+create table if not exists public.help_requests (
+  id           uuid primary key default gen_random_uuid(),
+  setup_id     uuid references public.meta_setup(id),
+  first_name   text,
+  last_name    text,
+  email        text,
+  step_index   int,
+  step_label   text,
+  question     text not null,
+  created_at   timestamptz not null default now()
+);
+
+create index if not exists help_requests_created_at_idx
+  on public.help_requests (created_at desc);
+
+alter table public.help_requests enable row level security;

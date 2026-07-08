@@ -16,6 +16,7 @@ import {
 import { ProgressRail } from "./ProgressRail";
 import { VideoEmbed } from "./VideoEmbed";
 import { CopyButton } from "./CopyButton";
+import { HelpWidget } from "./HelpWidget";
 
 type Status = "loading" | "ready" | "error";
 
@@ -239,6 +240,14 @@ export function WizardClient({ id }: { id: string | null }) {
           )}
         </main>
       </div>
+
+      {id && (
+        <HelpWidget
+          setupId={id}
+          stepIndex={step}
+          stepLabel={RAIL_LABELS[step - 1] ?? `Step ${step}`}
+        />
+      )}
     </div>
   );
 }
