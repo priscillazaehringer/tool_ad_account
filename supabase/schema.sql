@@ -1,6 +1,9 @@
 -- ---------------------------------------------------------------------------
 -- Schema for the Meta ad account setup wizard.
 -- Run this once against your Supabase project (SQL Editor → paste → Run).
+--
+-- Already ran an earlier version? Don't re-run this — run the migration in
+-- supabase/migrations/ instead (it only adds the new columns).
 -- ---------------------------------------------------------------------------
 
 -- gen_random_uuid() lives in pgcrypto. Supabase enables it by default, but
@@ -13,12 +16,13 @@ create table if not exists public.meta_setup (
   last_name         text,
   first_name        text,
   current_step      int not null default 1,
-  q1_answer         text,
-  q2_answer         text,
-  q3_answer         text,
-  q4_answer         text,
-  q5_completed_at   timestamptz,
-  q6_completed_at   timestamptz,
+  q1_answer         text,          -- Personal Facebook account?
+  q2_answer         text,          -- Facebook Business Page?
+  q3_answer         text,          -- Instagram connected to Page?
+  q4_answer         text,          -- Ad account used for real campaigns?
+  q5_answer         text,          -- Business Portfolio?
+  q6_completed_at   timestamptz,   -- Added our team to the Page
+  q7_completed_at   timestamptz,   -- Added our team to the ad account
   completed_at      timestamptz,
   created_at        timestamptz not null default now(),
   updated_at        timestamptz not null default now()

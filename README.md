@@ -5,8 +5,9 @@ through everything Facebook, Instagram and Meta need on their end — setting up
 Business Page, connecting Instagram, creating a real ad account, and granting
 our team partner access — so we can run ads for them.
 
-Clients land on a page, enter their name and email, and move through six
-branching steps. Progress saves to Supabase after every action, so they can
+Clients land on a page, enter their name and email, and move through seven
+branching steps (Facebook account → Business Page → Instagram → ad account →
+Business Portfolio → add our team to the Page → add our team to the ad account). Progress saves to Supabase after every action, so they can
 close the tab and resume later by re-entering the same email and last name. When
 they finish, a notification email fires to the admin inbox via Resend.
 
@@ -29,7 +30,7 @@ variables set — clients only initialise when an API route is actually called.
 src/
   app/
     page.tsx              Landing / entry page
-    wizard/page.tsx       The six-step wizard
+    wizard/page.tsx       The seven-step wizard
     complete/page.tsx     Completion page
     api/
       start/route.ts      Create or look up a client record
@@ -83,6 +84,9 @@ supabase/
 2. Open **SQL Editor**, paste the contents of [`supabase/schema.sql`](./supabase/schema.sql),
    and **Run**. This creates the `meta_setup` table, the resume-lookup index, the
    `updated_at` trigger, and enables Row Level Security with no policies.
+   - **Already ran an earlier version of the schema?** Don't re-run `schema.sql`.
+     Instead run the latest file in [`supabase/migrations/`](./supabase/migrations)
+     — it only adds the columns the Business Portfolio step needs.
 3. From **Project Settings → API**, copy:
    - the **Project URL** into `NEXT_PUBLIC_SUPABASE_URL`
    - the **service_role** key into `SUPABASE_SERVICE_ROLE_KEY`

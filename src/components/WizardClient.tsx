@@ -139,6 +139,32 @@ export function WizardClient({ id }: { id: string | null }) {
     }
   }
 
+  async function handleBack() {
+    setError(null);
+    // From an interstitial, "back" returns to the question, not the prior step.
+    if (interstitial) {
+      setInterstitial(null);
+      if (typeof window !== "undefined") window.scrollTo({ top: 0 });
+      return;
+    }
+    // On the first step there's nothing before it — return to the landing page.
+    if (step <= 1) {
+      router.push("/");
+      return;
+    }
+    setBusy(true);
+    try {
+      const prev = step - 1;
+      await saveProgress({ currentStep: prev });
+      setStep(prev);
+      if (typeof window !== "undefined") window.scrollTo({ top: 0 });
+    } catch {
+      setError(SAVE_ERROR);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   if (status === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -176,6 +202,16 @@ export function WizardClient({ id }: { id: string | null }) {
         </aside>
 
         <main className="min-w-0">
+          <button
+            type="button"
+            onClick={handleBack}
+            disabled={busy}
+            className="mb-8 inline-flex items-center gap-1.5 font-body text-sm text-ink/55 transition-colors hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <span aria-hidden>←</span>
+            {step > 1 || interstitial ? "Back" : "Start over"}
+          </button>
+
           {interstitial ? (
             <InterstitialView
               interstitial={interstitial}
