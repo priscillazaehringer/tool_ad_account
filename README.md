@@ -5,11 +5,11 @@ through everything Facebook, Instagram and Meta need on their end — setting up
 Business Page, connecting Instagram, creating a real ad account, and granting
 our team partner access — so we can run ads for them.
 
-Clients land on a page, enter their name and email, answer a Business Portfolio
-prerequisite, then move through five branching steps (Facebook Account →
-Business Page → Instagram → Ad Account → Invite Our Team). The final step has
-them invite our Business Portfolio as a partner once and grant access to all the
-assets we need, matching Meta's current permissions model. Progress saves to Supabase after every action, so they can
+Clients land on a page, enter their name and email, then move through six
+branching steps (Facebook Account → Business Page → Instagram → Business
+Portfolio → Ad Account → Invite Our Team). The final step has them invite our
+Business Portfolio as a partner once and grant access to all the assets we need,
+matching Meta's current permissions model. Progress saves to Supabase after every action, so they can
 close the tab and resume later by re-entering the same email and last name. When
 they finish, a notification email fires to the admin inbox via Resend.
 
@@ -32,7 +32,7 @@ variables set — clients only initialise when an API route is actually called.
 src/
   app/
     page.tsx              Landing / entry page
-    wizard/page.tsx       The wizard (portfolio prerequisite + 5 steps)
+    wizard/page.tsx       The six-step wizard
     complete/page.tsx     Completion page
     api/
       start/route.ts      Create or look up a client record

@@ -198,9 +198,7 @@ export function WizardClient({ id }: { id: string | null }) {
     <div className="mx-auto min-h-screen w-full max-w-5xl px-6 py-12 sm:py-16">
       <div className="grid gap-10 md:grid-cols-[220px_1fr] md:gap-14">
         <aside className="md:sticky md:top-16 md:self-start">
-          {/* The prerequisite is screen 1 and isn't in the rail, so the rail's
-              active index is step - 1 (0 during the prerequisite). */}
-          <ProgressRail labels={RAIL_LABELS} current={step - 1} />
+          <ProgressRail labels={RAIL_LABELS} current={step} />
         </aside>
 
         <main className="min-w-0">
