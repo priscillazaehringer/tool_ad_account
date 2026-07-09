@@ -2,33 +2,37 @@ import { EntryForm } from "@/components/EntryForm";
 
 export default function LandingPage() {
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-2xl flex-col justify-center px-6 py-16">
-      {/* Script wordmark — a stand-in brand mark until a real logo is added. */}
-      <p className="mb-8 font-script text-3xl leading-none text-ink">
-        Whitney Bateson
-      </p>
+    <main className="flex min-h-screen w-full items-center justify-center bg-tealdark px-6 py-12">
+      <div className="w-full max-w-[460px] rounded-[20px] bg-white p-8 sm:p-10">
+        {/* Brand lockup */}
+        <p className="eyebrow mb-1.5">Done For You Funnel</p>
+        <p className="font-display text-[28px] font-semibold leading-none text-teal">
+          Whitney Bateson
+        </p>
+        <p className="mt-1 font-body text-[13px] tracking-wide text-textmid">
+          Digital Strategy
+        </p>
+        <div className="my-7 h-0.5 w-10 rounded-full bg-coral" />
 
-      <p className="eyebrow mb-6">Done-for-You Funnel · Meta setup</p>
+        <h1 className="font-display text-[22px] font-semibold leading-snug text-teal">
+          Let&apos;s get your Meta setup done.
+        </h1>
+        <p className="mt-3 font-body text-sm leading-relaxed text-textmid">
+          This walks you through everything Facebook and Instagram need on your
+          end so we can run ads for you. Plan for 30 to 45 minutes and try to do
+          it in one sitting. You can come back if you need to, but it&apos;s
+          smoother start to finish.
+        </p>
 
-      <h1 className="font-display text-4xl font-medium leading-[1.05] text-ink sm:text-5xl">
-        Let&apos;s get your Meta setup done.
-      </h1>
+        <div className="mt-7">
+          <EntryForm />
+        </div>
 
-      <p className="mt-6 max-w-xl font-body text-base leading-relaxed text-ink/75">
-        This walks you through everything Facebook and Instagram need on your
-        end so we can run ads for you. Plan for 30 to 45 minutes and try to do
-        it in one sitting. You can come back if you need to, but it&apos;s
-        smoother start to finish.
-      </p>
-
-      <div className="mt-10">
-        <EntryForm />
+        <p className="mt-5 font-body text-xs leading-relaxed text-textlight">
+          Already started? Enter the same email and last name to pick up where
+          you left off.
+        </p>
       </div>
-
-      <p className="mt-6 max-w-xl font-body text-sm leading-relaxed text-ink/55">
-        Already started? Enter the same email and last name to pick up where you
-        left off.
-      </p>
     </main>
   );
 }

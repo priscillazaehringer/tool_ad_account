@@ -13,7 +13,7 @@ export function ProgressRail({
         {/* connecting line */}
         <span
           aria-hidden
-          className="absolute left-[7px] top-2 bottom-2 w-px bg-ink/15"
+          className="absolute left-[7px] top-2 bottom-2 w-px bg-line"
         />
         {labels.map((label, i) => {
           const n = i + 1;
@@ -28,18 +28,18 @@ export function ProgressRail({
                   state === "done"
                     ? "border-coral bg-coral"
                     : state === "active"
-                      ? "border-coral bg-paper"
-                      : "border-ink/25 bg-paper",
+                      ? "border-coral bg-white"
+                      : "border-line bg-white",
                 ].join(" ")}
               />
               <span
                 className={[
                   "font-body text-sm leading-tight",
                   state === "active"
-                    ? "font-semibold text-ink"
+                    ? "font-semibold text-teal"
                     : state === "done"
-                      ? "text-ink/70"
-                      : "text-ink/40",
+                      ? "text-textmid"
+                      : "text-textlight",
                 ].join(" ")}
               >
                 {label}

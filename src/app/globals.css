@@ -2,98 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---------------------------------------------------------------------------
-   Whitney Bateson brand fonts.
-
-   Boston Angel (display), Proxima Nova (body) and Milkshake Script (accents)
-   are LICENSED fonts and are not bundled here. Until they're activated the
-   stacks below fall back to close stand-ins loaded in layout.tsx (Playfair
-   Display, Montserrat, Caveat) so the layout still looks intentional.
-
-   To activate the real fonts, do ONE of the following:
-
-   A) Adobe Fonts (recommended for Proxima Nova, and Boston Angel if her kit
-      includes it): add the kit <link> in layout.tsx — see the note there.
-
-   B) Self-host: drop woff2 files into /public/fonts and uncomment the
-      @font-face blocks at the bottom of this file.
-
-   Either way, the licensed family names are already first in each stack, so
-   they win automatically once the browser can load them.
---------------------------------------------------------------------------- */
-:root {
-  --font-display: "Boston Angel", "Playfair Display", Georgia, "Times New Roman",
-    serif;
-  --font-body: "Proxima Nova", "Montserrat", system-ui, -apple-system,
-    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-script: "Milkshake", "Caveat", "Brush Script MT", cursive;
-}
+/* Fonts (Lora + DM Sans) are loaded via <link> in layout.tsx. */
 
 @layer base {
   body {
-    @apply bg-paper text-ink font-body antialiased;
+    @apply bg-cream text-ink font-body antialiased;
   }
 }
 
 @layer components {
-  /* Uppercase small-caps label with wide tracking. */
+  /* Small-caps coral label with wide tracking (brand eyebrow / section label). */
   .eyebrow {
-    @apply font-body text-[0.72rem] font-semibold uppercase tracking-label text-ink/70;
+    @apply font-body text-[11px] font-medium uppercase tracking-label text-coral;
   }
 
-  /* Square-cornered, no-radius button base. */
+  /* Buttons — soft rounded corners. */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-none border px-6 py-3
-           font-body text-sm font-semibold transition-colors duration-150
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3
+           font-body text-sm font-medium transition-colors duration-150
            disabled:cursor-not-allowed disabled:opacity-50;
   }
 
-  /* Primary CTA — coral fill with deep-teal text (her brand pairing). */
+  /* Primary CTA — coral fill, white text (matches the intake's Continue button). */
   .btn-primary {
-    @apply btn border-coral bg-coral text-ink hover:bg-ink hover:border-ink hover:text-paper;
+    @apply btn border border-coral bg-coral text-white hover:bg-coraldark hover:border-coraldark;
   }
 
+  /* Teal action (secondary progression / confirm). */
+  .btn-teal {
+    @apply btn border border-teal bg-teal text-white hover:bg-tealmid hover:border-tealmid;
+  }
+
+  /* Quiet outline button. */
   .btn-outline {
-    @apply btn border-ink/25 bg-transparent text-ink hover:border-ink hover:bg-ink/[0.04];
+    @apply btn border border-line bg-white text-ink hover:border-teal;
   }
 
   .field-label {
-    @apply eyebrow mb-2 block;
+    @apply mb-2 block font-body text-[13px] font-medium text-ink;
   }
 
   .field-input {
-    @apply w-full rounded-none border border-ink/20 bg-transparent px-4 py-3
+    @apply w-full rounded-lg border-[1.5px] border-line bg-white px-4 py-3
            font-body text-base text-ink outline-none
-           placeholder:text-ink/35 focus:border-coral;
+           placeholder:text-textlight focus:border-teal;
+  }
+
+  /* Info callout — sky-light fill with a sky left border. */
+  .callout-info {
+    @apply rounded-lg border-l-[3px] border-sky bg-skylight px-4 py-3
+           font-body text-sm leading-relaxed text-teal;
+  }
+
+  /* Soft warning callout (peach). */
+  .callout-warn {
+    @apply rounded-lg border border-[#ffd4b3] bg-[#fff8f0] px-4 py-3
+           font-body text-sm leading-relaxed text-[#8a4000];
   }
 }
-
-/* ---------------------------------------------------------------------------
-   Self-hosting the licensed fonts (Option B). Add the woff2 files to
-   /public/fonts, then uncomment. Filenames are examples — match your files.
-
-@font-face {
-  font-family: "Boston Angel";
-  src: url("/fonts/boston-angel.woff2") format("woff2");
-  font-weight: 400 700;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Proxima Nova";
-  src: url("/fonts/proxima-nova-regular.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Proxima Nova";
-  src: url("/fonts/proxima-nova-semibold.woff2") format("woff2");
-  font-weight: 600;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Milkshake";
-  src: url("/fonts/milkshake.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
---------------------------------------------------------------------------- */

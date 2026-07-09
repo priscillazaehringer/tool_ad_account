@@ -92,8 +92,8 @@ export function EntryForm() {
         </p>
       )}
 
-      <button type="submit" disabled={busy} className="btn-primary w-full sm:w-auto">
-        {busy ? "Starting…" : "Begin setup"}
+      <button type="submit" disabled={busy} className="btn-primary w-full">
+        {busy ? "Starting…" : "Begin setup →"}
       </button>
     </form>
   );

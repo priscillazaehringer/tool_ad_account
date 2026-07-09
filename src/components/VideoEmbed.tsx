@@ -3,14 +3,14 @@
 export function VideoEmbed({ url }: { url: string | null }) {
   if (!url) {
     return (
-      <div className="flex aspect-video w-full items-center justify-center border border-ink/15 bg-ink/[0.03]">
-        <span className="eyebrow text-ink/40">Video coming soon</span>
+      <div className="flex aspect-video w-full items-center justify-center rounded-xl border border-line bg-white">
+        <span className="eyebrow text-textlight">Video coming soon</span>
       </div>
     );
   }
 
   return (
-    <div className="aspect-video w-full overflow-hidden border border-ink/15 bg-black">
+    <div className="aspect-video w-full overflow-hidden rounded-xl border border-line bg-black">
       <iframe
         src={url}
         title="Setup walkthrough"

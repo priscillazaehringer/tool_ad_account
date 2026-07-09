@@ -52,14 +52,14 @@ export function HelpWidget({
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
       {open && (
-        <div className="w-80 max-w-[calc(100vw-2.5rem)] border border-ink/15 bg-paper p-5 shadow-xl">
+        <div className="w-80 max-w-[calc(100vw-2.5rem)] rounded-xl border border-line bg-white p-5 shadow-xl">
           <div className="mb-3 flex items-start justify-between gap-4">
             <p className="eyebrow text-ink">Stuck? Ask us</p>
             <button
               type="button"
               onClick={close}
               aria-label="Close"
-              className="-mr-1 -mt-1 p-1 text-lg leading-none text-ink/50 hover:text-ink"
+              className="-mr-1 -mt-1 p-1 text-lg leading-none text-textlight hover:text-ink"
             >
               ×
             </button>
@@ -114,7 +114,7 @@ export function HelpWidget({
       <button
         type="button"
         onClick={() => (open ? close() : setOpen(true))}
-        className="btn-primary shadow-lg"
+        className="btn-primary rounded-full shadow-lg"
         aria-expanded={open}
       >
         {open ? "Close" : "Need help?"}

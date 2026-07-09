@@ -39,10 +39,10 @@ export function CopyButton({
     <button
       type="button"
       onClick={copy}
-      className="group flex w-full items-center justify-between gap-4 rounded-none border border-ink/25 bg-paper px-5 py-4 text-left transition-colors hover:border-coral"
+      className="group flex w-full items-center justify-between gap-4 rounded-lg border-[1.5px] border-line bg-white px-5 py-4 text-left transition-colors hover:border-teal"
     >
-      <span className="font-mono text-xl tracking-wide text-ink">{value}</span>
-      <span className="eyebrow shrink-0 text-ink/60 group-hover:text-ink">
+      <span className="font-mono text-xl tracking-wide text-teal">{value}</span>
+      <span className="eyebrow shrink-0 group-hover:text-coraldark">
         {copied ? "Copied ✓" : label}
       </span>
     </button>

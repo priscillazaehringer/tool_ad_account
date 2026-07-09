@@ -168,24 +168,24 @@ export function WizardClient({ id }: { id: string | null }) {
 
   if (status === "loading") {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="eyebrow text-ink/40">Loading your setup…</p>
+      <div className="flex min-h-screen items-center justify-center bg-cream">
+        <p className="font-body text-sm text-textlight">Loading your setup…</p>
       </div>
     );
   }
 
   if (status === "error") {
     return (
-      <div className="flex min-h-screen items-center justify-center px-6">
+      <div className="flex min-h-screen items-center justify-center bg-cream px-6">
         <div className="max-w-md text-center">
-          <p className="mb-4 font-display text-2xl text-ink">
+          <p className="mb-4 font-display text-2xl font-semibold text-teal">
             We couldn&apos;t load your setup.
           </p>
-          <p className="mb-6 font-body text-sm text-ink/60">
+          <p className="mb-6 font-body text-sm text-textmid">
             The link may be incomplete. Head back and enter your email and last
             name to pick up where you left off.
           </p>
-          <a href="/" className="btn-outline">
+          <a href="/" className="btn-teal">
             Back to start
           </a>
         </div>
@@ -196,24 +196,41 @@ export function WizardClient({ id }: { id: string | null }) {
   const current = STEPS[step - 1];
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-5xl px-6 py-12 sm:py-16">
-      <div className="grid gap-10 md:grid-cols-[220px_1fr] md:gap-14">
-        <aside className="md:sticky md:top-16 md:self-start">
-          <ProgressRail labels={RAIL_LABELS} current={step} />
-        </aside>
+    <div className="min-h-screen bg-cream">
+      <header className="bg-tealdark">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <div>
+            <p className="font-display text-lg font-semibold leading-none text-white">
+              Whitney Bateson
+            </p>
+            <p className="mt-1 font-body text-[11px] uppercase tracking-label text-sky">
+              Meta Setup
+            </p>
+          </div>
+          <span className="rounded-full bg-white/10 px-3 py-1 font-body text-xs text-skylight">
+            Step {step} of {TOTAL_STEPS}
+          </span>
+        </div>
+      </header>
 
-        <main className="min-w-0">
-          <button
-            type="button"
-            onClick={handleBack}
-            disabled={busy}
-            className="mb-8 inline-flex items-center gap-1.5 font-body text-sm text-ink/55 transition-colors hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            <span aria-hidden>←</span>
-            {step > 1 || interstitial ? "Back" : "Start over"}
-          </button>
+      <div className="mx-auto w-full max-w-5xl px-6 py-10 sm:py-14">
+        <div className="grid gap-10 md:grid-cols-[220px_1fr] md:gap-14">
+          <aside className="md:sticky md:top-10 md:self-start">
+            <ProgressRail labels={RAIL_LABELS} current={step} />
+          </aside>
 
-          {interstitial ? (
+          <main className="min-w-0">
+            <button
+              type="button"
+              onClick={handleBack}
+              disabled={busy}
+              className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3.5 py-1.5 font-body text-[13px] text-textmid transition-colors hover:border-teal hover:text-teal disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <span aria-hidden>←</span>
+              {step > 1 || interstitial ? "Back" : "Start over"}
+            </button>
+
+            {interstitial ? (
             <InterstitialView
               interstitial={interstitial}
               busy={busy}
@@ -233,12 +250,13 @@ export function WizardClient({ id }: { id: string | null }) {
             />
           )}
 
-          {error && (
-            <p className="mt-6 font-body text-sm text-alert" role="alert">
-              {error}
-            </p>
-          )}
-        </main>
+            {error && (
+              <p className="mt-6 font-body text-sm text-alert" role="alert">
+                {error}
+              </p>
+            )}
+          </main>
+        </div>
       </div>
 
       {id && (
@@ -264,14 +282,10 @@ function QuestionView({
   return (
     <div>
       <p className="eyebrow mb-4">{step.eyebrow}</p>
-      <h1 className="font-display text-3xl font-medium leading-tight text-ink sm:text-4xl">
+      <h1 className="font-display text-3xl font-semibold leading-tight text-teal sm:text-[34px]">
         {step.title}
       </h1>
-      {step.helper && (
-        <p className="mt-5 border-l-2 border-coral pl-4 font-body text-sm leading-relaxed text-ink/75">
-          {step.helper}
-        </p>
-      )}
+      {step.helper && <p className="callout-info mt-5">{step.helper}</p>}
       <div className="mt-8 space-y-3">
         {step.options.map((option) => (
           <button
@@ -279,7 +293,7 @@ function QuestionView({
             type="button"
             disabled={busy}
             onClick={() => onSelect(option)}
-            className="btn-outline w-full justify-start text-left"
+            className="w-full rounded-xl border-[1.5px] border-line bg-white px-5 py-4 text-left font-body text-[15px] text-ink transition-colors hover:border-teal disabled:cursor-not-allowed disabled:opacity-50"
           >
             {option.label}
           </button>
@@ -301,23 +315,24 @@ function ActionView({
   return (
     <div>
       <p className="eyebrow mb-4">{step.eyebrow}</p>
-      <h1 className="font-display text-3xl font-medium leading-tight text-ink sm:text-4xl">
+      <h1 className="font-display text-3xl font-semibold leading-tight text-teal sm:text-[34px]">
         {step.title}
       </h1>
       <div className="mt-5 space-y-3">
         {step.body.map((para, i) => (
-          <p key={i} className="font-body text-base leading-relaxed text-ink/75">
+          <p
+            key={i}
+            className="font-body text-base leading-relaxed text-textmid"
+          >
             {para}
           </p>
         ))}
       </div>
 
       {step.videoNote && (
-        <div className="mt-6 border border-coral/60 bg-coral/[0.08] p-4">
-          <p className="eyebrow mb-2 text-ink">One correction to the video</p>
-          <p className="font-body text-sm leading-relaxed text-ink/80">
-            {step.videoNote}
-          </p>
+        <div className="callout-warn mt-6">
+          <p className="mb-1 font-medium">One correction to the video</p>
+          {step.videoNote}
         </div>
       )}
 
@@ -339,7 +354,7 @@ function ActionView({
             {step.checklist.map((item) => (
               <li
                 key={item.label}
-                className="flex items-center gap-3 font-body text-base text-ink/80"
+                className="flex items-center gap-3 font-body text-base text-ink"
               >
                 <span aria-hidden className="shrink-0 text-lg text-coral">
                   ☑
@@ -347,7 +362,7 @@ function ActionView({
                 <span>
                   {item.label}
                   {item.note && (
-                    <span className="text-ink/50"> — {item.note}</span>
+                    <span className="text-textlight"> — {item.note}</span>
                   )}
                 </span>
               </li>
@@ -356,11 +371,7 @@ function ActionView({
         </div>
       )}
 
-      {step.warning && (
-        <p className="mt-6 border-l-2 border-alert pl-4 font-body text-sm leading-relaxed text-alert">
-          {step.warning}
-        </p>
-      )}
+      {step.warning && <p className="callout-warn mt-6">{step.warning}</p>}
 
       <div className="mt-8">
         <button
@@ -390,7 +401,7 @@ function InterstitialView({
       {interstitial.heading && (
         <>
           <p className="eyebrow mb-4">Before you continue</p>
-          <h1 className="font-display text-3xl font-medium leading-tight text-ink sm:text-4xl">
+          <h1 className="font-display text-3xl font-semibold leading-tight text-teal sm:text-[34px]">
             {interstitial.heading}
           </h1>
         </>
@@ -401,7 +412,7 @@ function InterstitialView({
           {interstitial.body.map((para, i) => (
             <p
               key={i}
-              className="font-body text-base leading-relaxed text-ink/75"
+              className="font-body text-base leading-relaxed text-textmid"
             >
               {para}
             </p>
@@ -416,7 +427,7 @@ function InterstitialView({
               {interstitial.body.map((para, i) => (
                 <p
                   key={i}
-                  className="font-body text-base leading-relaxed text-ink/75"
+                  className="font-body text-base leading-relaxed text-textmid"
                 >
                   {para}
                 </p>

@@ -1,38 +1,38 @@
 import type { Config } from "tailwindcss";
 
-// Whitney Bateson brand tokens.
-// Warm, editorial, unfussy. No rounded corners on interactive elements.
+// Whitney Bateson brand tokens — matched to the live Done-For-You Funnel intake.
+// Lora (display) + DM Sans (body), warm cream + deep teal + coral, soft rounded
+// corners.
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        // Brand palette
-        cream: "#efeae3", // warm cream — backgrounds
-        pink: "#ffcdcd", // soft pink
-        coral: "#ff7f50", // coral — accent / CTAs
-        lime: "#e3f696", // pale lime
-        sky: "#aed3dd", // light blue — hero / info
-        teal: "#02525d", // deep teal — dark anchor / text
+        cream: "#efeae3", // page background
+        white: "#ffffff",
+        teal: "#02525d", // primary teal
+        tealdark: "#013840", // dark surfaces (landing bg, headers) + body text
+        tealmid: "#3a6068", // secondary text / hover
+        coral: "#ff7f50", // accent / primary CTAs
+        coraldark: "#e86e3f", // coral hover
+        lime: "#e3f696",
+        sky: "#aed3dd",
+        skylight: "#c8e6ee", // info callout fill
+        line: "#d4e4e7", // borders
+        textmid: "#3a6068",
+        textlight: "#7a9499",
+        alert: "#b23a1f", // form errors
 
-        // Functional (not a brand colour): errors & warnings.
-        alert: "#b23a1f",
-
-        // Semantic aliases used throughout the UI.
-        paper: "#efeae3", // page background  (= cream)
-        ink: "#02525d", // primary text     (= deep teal)
+        // Semantic aliases kept so existing utility classes keep working.
+        paper: "#efeae3", // = cream
+        ink: "#013840", // = tealdark (body text)
       },
       fontFamily: {
-        // Boston Angel (display) and Proxima Nova (body) are licensed fonts;
-        // Milkshake Script is used for handwritten accents. See globals.css and
-        // README for how to activate them. Web-safe/Google fallbacks are wired
-        // in so the layout looks right before the licensed fonts load.
-        display: ["var(--font-display)", "Georgia", "serif"],
-        body: ["var(--font-body)", "system-ui", "sans-serif"],
-        script: ["var(--font-script)", "cursive"],
+        display: ["Lora", "Georgia", "serif"],
+        body: ['"DM Sans"', "system-ui", "sans-serif"],
       },
       letterSpacing: {
-        label: "0.18em",
+        label: "0.15em",
       },
     },
   },
