@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { getResend } from "@/lib/resend";
 
 export const runtime = "nodejs";
 
@@ -67,7 +68,41 @@ export async function POST(req: NextRequest) {
 
     if (error) throw error;
 
-    return NextResponse.json({ ok: true });
+    // Best-effort email notification. The question is already saved above, so
+    // if Resend isn't configured or fails we still return ok.
+    let emailed = false;
+    try {
+      const name =
+        [first_name, last_name].filter(Boolean).join(" ") || "A client";
+      const notifyEmail =
+        process.env.NOTIFY_EMAIL ?? "admin@whitneybateson.com";
+      const fromEmail =
+        process.env.FROM_EMAIL ?? "notifications@whitneybateson.com";
+
+      const resend = getResend();
+      await resend.emails.send({
+        from: fromEmail,
+        to: notifyEmail,
+        replyTo: email ?? undefined,
+        subject: `Meta setup — help request from ${name}`,
+        text: [
+          `${name} asked for help in the Meta setup wizard.`,
+          "",
+          `Client: ${name}`,
+          `Email:  ${email ?? "—"}`,
+          `Step:   ${body.stepLabel ?? "—"}`,
+          "",
+          "Question",
+          "--------",
+          question,
+        ].join("\n"),
+      });
+      emailed = true;
+    } catch (mailErr) {
+      console.error("[/api/help] email", mailErr);
+    }
+
+    return NextResponse.json({ ok: true, emailed });
   } catch (err) {
     console.error("[/api/help]", err);
     return NextResponse.json(
