@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { getResend } from "@/lib/resend";
+import { clientName, summaryText } from "@/lib/summary";
 
 export const runtime = "nodejs";
 
@@ -25,6 +26,12 @@ export async function POST(req: NextRequest) {
     first_name: string | null;
     last_name: string | null;
     email: string | null;
+    q2_answer: string | null;
+    q3_answer: string | null;
+    q4_answer: string | null;
+    q5_answer: string | null;
+    payment_answer: string | null;
+    q6_completed_at: string | null;
     completed_at: string | null;
   };
 
@@ -34,7 +41,9 @@ export async function POST(req: NextRequest) {
       .from("meta_setup")
       .update({ completed_at: new Date().toISOString() })
       .eq("id", id)
-      .select("first_name, last_name, email, completed_at")
+      .select(
+        "first_name, last_name, email, q2_answer, q3_answer, q4_answer, q5_answer, payment_answer, q6_completed_at, completed_at",
+      )
       .maybeSingle();
 
     if (error) throw error;
@@ -57,8 +66,7 @@ export async function POST(req: NextRequest) {
     const fromEmail =
       process.env.FROM_EMAIL ?? "notifications@whitneybateson.com";
 
-    const name =
-      [row.first_name, row.last_name].filter(Boolean).join(" ") || "A client";
+    const name = clientName(row);
 
     const resend = getResend();
     await resend.emails.send({
@@ -66,13 +74,16 @@ export async function POST(req: NextRequest) {
       to: notifyEmail,
       subject: `Meta setup complete — ${name}`,
       text: [
-        `${name} has finished the Meta ad account setup wizard.`,
+        `${name} has finished the Meta setup wizard.`,
         "",
-        `Name:  ${name}`,
-        `Email: ${row.email ?? "—"}`,
+        `Client: ${name}`,
+        `Email:  ${row.email ?? "—"}`,
+        "",
+        "Summary",
+        "-------",
+        summaryText(row),
+        "",
         `Record ID: ${id}`,
-        "",
-        "You should now have partner access to their Page and ad account.",
       ].join("\n"),
     });
     emailed = true;

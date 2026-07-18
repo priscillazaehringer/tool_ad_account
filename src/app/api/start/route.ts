@@ -28,12 +28,13 @@ export async function POST(req: NextRequest) {
   try {
     const supabase = getSupabaseAdmin();
 
-    // Look for an existing entry to resume.
+    // Look for an existing entry to resume — keyed off email only. (Last name
+    // is stored for the record but not used for matching: it's too easy to
+    // mistype or change and it would silently break resume.)
     const { data: existing, error: lookupError } = await supabase
       .from("meta_setup")
       .select("id, current_step, completed_at")
       .ilike("email", email)
-      .ilike("last_name", lastName)
       .order("created_at", { ascending: true })
       .limit(1);
 

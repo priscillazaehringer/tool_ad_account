@@ -83,7 +83,7 @@ export function WizardClient({ id }: { id: string | null }) {
           body: JSON.stringify({ id }),
         });
         if (!res.ok) throw new Error("complete failed");
-        router.push("/complete");
+        router.push(`/complete?id=${encodeURIComponent(id ?? "")}`);
         return;
       }
       await saveProgress({ currentStep: next });
@@ -349,7 +349,9 @@ function ActionView({
 
       {step.checklist && step.checklist.length > 0 && (
         <div className="mt-6">
-          <p className="eyebrow mb-3">Grant us access to</p>
+          <p className="eyebrow mb-3">
+            {step.checklistHeading ?? "Grant us access to"}
+          </p>
           <ul className="space-y-2">
             {step.checklist.map((item) => (
               <li

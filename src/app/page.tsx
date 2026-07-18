@@ -29,8 +29,7 @@ export default function LandingPage() {
         </div>
 
         <p className="mt-5 font-body text-xs leading-relaxed text-textlight">
-          Already started? Enter the same email and last name to pick up where
-          you left off.
+          Already started? Enter the same email to pick up where you left off.
         </p>
       </div>
     </main>

@@ -5,12 +5,15 @@ through everything Facebook, Instagram and Meta need on their end — setting up
 Business Page, connecting Instagram, creating a real ad account, and granting
 our team partner access — so we can run ads for them.
 
-Clients land on a page, enter their name and email, then move through six
+Clients land on a page, enter their name and email, then move through seven
 branching steps (Facebook Account → Business Portfolio → Business Page →
-Instagram → Ad Account → Invite Our Team). The Business Portfolio comes first as
-the container everything else is created inside. The final step has them invite
-our Business Portfolio as a partner once and grant access to all the assets we
-need, matching Meta's current permissions model. Progress saves to Supabase after every action, so they can
+Instagram → Ad Account → Payment Method → Invite Our Team), followed by a
+confirmation screen. The Business Portfolio comes early as the container
+everything else is created inside; the final step has them add our Business
+Portfolio as a partner once (we inherit access to the Page, ad account,
+Instagram and Pixel), matching Meta's current permissions model. Resume is keyed
+off email only. On completion, the notification email includes a per-step
+summary. Progress saves to Supabase after every action, so they can
 close the tab and resume later by re-entering the same email and last name. When
 they finish, a notification email fires to the admin inbox via Resend.
 

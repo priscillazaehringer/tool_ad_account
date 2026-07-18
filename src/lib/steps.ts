@@ -2,17 +2,18 @@
 // Single source of truth for the wizard: questions, options, helper text,
 // action-step copy, and the video embed URLs.
 //
-// Flow shape (6 numbered steps):
-//   Step 1 of 6   — Facebook Account
-//   Step 2 of 6   — Business Portfolio  (the container everything lives in)
-//   Step 3 of 6   — Business Page
-//   Step 4 of 6   — Instagram
-//   Step 5 of 6   — Ad Account
-//   Step 6 of 6   — Invite Our Team  (one combined partner-access step)
+// Flow shape (7 numbered steps + a confirmation screen):
+//   Step 1 of 7   — Facebook Account
+//   Step 2 of 7   — Business Portfolio  (the parent of everything)
+//   Step 3 of 7   — Business Page
+//   Step 4 of 7   — Instagram  (optional)
+//   Step 5 of 7   — Ad Account
+//   Step 6 of 7   — Payment Method
+//   Step 7 of 7   — Invite Our Team  (add us to the Business Portfolio)
+//   → Confirmation screen + completion email
 //
-// To wire in videos, drop *embed* URLs into the VIDEOS map. Any embeddable URL
-// works — Vimeo, unlisted YouTube, or Loom. Use the embed form, e.g.
-//   Loom: https://www.loom.com/embed/VIDEO_ID   (NOT the /share/ form)
+// To wire in videos, drop *embed* URLs into the VIDEOS map. Use the embed form,
+// e.g. Loom: https://www.loom.com/embed/VIDEO_ID  (NOT the /share/ form).
 // Leave a value as null to show a "video coming soon" placeholder.
 // ---------------------------------------------------------------------------
 
@@ -36,11 +37,11 @@ export const VIDEOS: Record<VideoKey, string | null> = {
     "https://www.loom.com/embed/9a4e8b6ae1604788b7c9b1afb12712f5",
   // Step 3 — creating a Facebook Business Page
   businessPage: "https://www.loom.com/embed/a4c80266e542481d8a6523ebca76f7d6",
-  // Step 4 — connecting Instagram to the Page
+  // Step 4 — connecting/creating Instagram
   instagram: "https://www.loom.com/embed/2a2946a15e1f427aa8755c0efae7cdd8",
-  // Step 5 — creating a real ad account
+  // Step 5 — creating a real ad account in Ads Manager
   adAccount: "https://www.loom.com/embed/635484e93e834d729cc964e0f750a5cc",
-  // Step 6 — inviting our Business Portfolio as a partner and selecting assets.
+  // Step 7 — inviting our Business Portfolio as a partner.
   // NOTE: this recording demonstrates adding via People/email; the step's
   // videoNote corrects that to the Partner + Portfolio ID flow.
   inviteTeam: "https://www.loom.com/embed/2b959f77906242d0b2a177226c6631a9",
@@ -62,7 +63,8 @@ export type AnswerColumn =
   | "q2_answer" // Business Page
   | "q3_answer" // Instagram
   | "q4_answer" // Ad Account
-  | "q5_answer"; // Business Portfolio
+  | "q5_answer" // Business Portfolio
+  | "payment_answer"; // Payment Method
 export type CompletedColumn = "q6_completed_at" | "q7_completed_at";
 
 export interface ChecklistItem {
@@ -91,6 +93,7 @@ export interface ActionStep {
   /** A correction/caveat shown in a callout right above the video. */
   videoNote?: string;
   showPortfolioId: boolean;
+  checklistHeading?: string;
   checklist?: ChecklistItem[];
   warning?: string;
   confirmLabel: string;
@@ -105,6 +108,7 @@ export const ANSWER_COLUMNS: AnswerColumn[] = [
   "q3_answer",
   "q4_answer",
   "q5_answer",
+  "payment_answer",
 ];
 export const COMPLETED_COLUMNS: CompletedColumn[] = [
   "q6_completed_at",
@@ -116,7 +120,7 @@ export const STEPS: Step[] = [
     kind: "question",
     index: 1,
     answerColumn: "q1_answer",
-    eyebrow: "Step 1 of 6",
+    eyebrow: "Step 1 of 7",
     title: "Do you have a personal Facebook account?",
     options: [
       { value: "yes", label: "Yes, I have one" },
@@ -139,10 +143,10 @@ export const STEPS: Step[] = [
     kind: "question",
     index: 2,
     answerColumn: "q5_answer",
-    eyebrow: "Step 2 of 6",
-    title: "Do you have a Meta Business Portfolio?",
+    eyebrow: "Step 2 of 7",
+    title: "Do you already have a Meta Business Portfolio?",
     helper:
-      "A Meta Business Portfolio is where Meta stores your Facebook Page, Instagram account, ad account, Pixel, and permissions. It's the container everything else lives in — so we set it up first. If you've run Meta ads before or hired someone to manage your Facebook Page, you may already have one.",
+      "This is the big one. A Business Portfolio is the parent that holds your Page, Instagram, ad account, Pixel, and permissions in one place. If you've run Meta ads before or had someone manage your Page, you may already have one — a lot of people do and don't realise it. If you're not sure, choose that and we'll help you check.",
     options: [
       { value: "yes", label: "Yes, I already have one" },
       {
@@ -176,7 +180,7 @@ export const STEPS: Step[] = [
     kind: "question",
     index: 3,
     answerColumn: "q2_answer",
-    eyebrow: "Step 3 of 6",
+    eyebrow: "Step 3 of 7",
     title: "Do you have a Facebook Business Page?",
     options: [
       { value: "yes", label: "Yes, I have a Page" },
@@ -198,35 +202,37 @@ export const STEPS: Step[] = [
     kind: "question",
     index: 4,
     answerColumn: "q3_answer",
-    eyebrow: "Step 4 of 6",
-    title: "Is your Instagram connected to your Page?",
+    eyebrow: "Step 4 of 7",
+    title: "Do you have an Instagram account for your business?",
+    helper:
+      "Instagram is optional — plenty of businesses run Meta ads on Facebook alone. If you'd rather not advertise on Instagram, just say so and we'll skip it.",
     options: [
-      { value: "yes", label: "Yes, it's connected" },
+      { value: "yes", label: "Yes, I have one" },
       {
         value: "no",
         label: "No, not yet",
         interstitial: {
           type: "video",
           video: "instagram",
-          heading: "Connect Instagram to your Page",
+          heading: "Set up Instagram and connect it",
           body: [
-            "This short video walks through linking your Instagram account to your Facebook Page. Do that, then continue.",
+            "This short video walks through setting up Instagram and connecting it to your Facebook Page. Do that, then continue.",
           ],
         },
       },
-      { value: "no_instagram", label: "I don't use Instagram" },
+      { value: "no_instagram", label: "I don't want to advertise on Instagram" },
     ],
   },
   {
     kind: "question",
     index: 5,
     answerColumn: "q4_answer",
-    eyebrow: "Step 5 of 6",
-    title: "Do you have a Meta ad account you've used for real campaigns?",
+    eyebrow: "Step 5 of 7",
+    title: "Have you ever used Meta Ads Manager to create an ad account?",
     helper:
-      "Boosting an Instagram post doesn't count. That creates a hidden ad account we can't really work with. If you've only ever boosted posts, choose No.",
+      "We mean a real ad account you set up in Ads Manager — not just boosting a Facebook or Instagram post. Boosting quietly creates a hidden ad account we can't properly work with. If you've only ever boosted posts, choose No.",
     options: [
-      { value: "yes", label: "Yes, I've run real campaigns" },
+      { value: "yes", label: "Yes, I've used Ads Manager" },
       {
         value: "no_unsure",
         label: "No / Not sure",
@@ -235,7 +241,31 @@ export const STEPS: Step[] = [
           video: "adAccount",
           heading: "Create a proper ad account",
           body: [
-            "This walkthrough shows how to create a real ad account inside your Business Portfolio. Set it up, then continue.",
+            "This walkthrough shows how to create a real ad account inside your Business Portfolio using Ads Manager. Set it up, then continue.",
+          ],
+        },
+      },
+    ],
+  },
+  {
+    kind: "question",
+    index: 6,
+    answerColumn: "payment_answer",
+    eyebrow: "Step 6 of 7",
+    title: "Is there a payment method on your ad account?",
+    helper:
+      "Meta won't let ads run without a card on file — even when everything else is perfect. Adding it now saves a frustrating delay right when we're ready to launch.",
+    options: [
+      { value: "yes", label: "Yes, there's a card on file" },
+      {
+        value: "no_unsure",
+        label: "No / Not sure",
+        interstitial: {
+          type: "text",
+          heading: "Add a payment method",
+          body: [
+            "In Meta Business settings, open Billing & payments (sometimes called Payment settings) and add a card to your ad account.",
+            "Once it's saved, come back and continue.",
           ],
         },
       },
@@ -243,27 +273,26 @@ export const STEPS: Step[] = [
   },
   {
     kind: "action",
-    index: 6,
+    index: 7,
     completedColumn: "q6_completed_at",
-    eyebrow: "Step 6 of 6",
-    title: "Invite our team",
+    eyebrow: "Step 7 of 7",
+    title: "Add our team to your Business Portfolio",
     body: [
-      "Last step. Instead of adding us to each asset separately, you'll invite our Business Portfolio as a Partner once and grant access to everything we need.",
-      "In your Business settings, add a Partner using the ID below, then select the assets on the checklist. The walkthrough shows exactly where everything is.",
+      "This is the important one — and it's just one step. Add our Business Portfolio as a Partner on your Business Portfolio, and we automatically inherit access to everything inside it. No clicking through four separate permission screens.",
+      "In your Business settings, add a Partner using the ID below. The walkthrough shows exactly where it is.",
     ],
     video: "inviteTeam",
     videoNote:
-      "One correction to the video: it shows adding us under People by email — please don't do it that way. Add us as a Partner instead. When you go to add access, choose Partner (not Person). It'll ask for a Business Portfolio ID — that's the number below, not an email address. Everything after that (selecting your assets and confirming) works exactly the same.",
+      "One correction to the video: it shows adding us under People by email — please don't do it that way. Add us as a Partner instead. When you go to add access, choose Partner (not Person). It'll ask for a Business Portfolio ID — that's the number below, not an email address. The rest of the flow works exactly the same.",
     showPortfolioId: true,
+    checklistHeading: "Adding us at the Portfolio level covers",
     checklist: [
       { label: "Facebook Page" },
-      { label: "Ad Account" },
+      { label: "Ad account" },
       { label: "Instagram", note: "if connected" },
       { label: "Pixel", note: "if one exists" },
     ],
-    warning:
-      "If you see more than one ad account, choose the one you use for real campaigns. Picking the wrong one is the most common mistake here.",
-    confirmLabel: "I've invited your team",
+    confirmLabel: "I've added your team to my Business Portfolio",
   },
 ];
 
@@ -276,5 +305,6 @@ export const RAIL_LABELS = [
   "Business Page",
   "Instagram",
   "Ad Account",
+  "Payment Method",
   "Invite Our Team",
 ];
