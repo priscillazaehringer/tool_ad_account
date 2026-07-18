@@ -69,7 +69,7 @@ export function HelpWidget({
             <div>
               <p className="font-body text-sm leading-relaxed text-ink/80">
                 Got it — thanks! Priscilla will get back to you within 24 hours
-                to help you troubleshoot. You can keep going in the meantime.
+                to help you troubleshoot.
               </p>
               <button
                 type="button"
