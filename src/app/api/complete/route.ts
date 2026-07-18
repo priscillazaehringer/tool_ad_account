@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { getResend } from "@/lib/resend";
+import { sendNotification } from "@/lib/mailer";
 import { clientName, summaryText } from "@/lib/summary";
 
 export const runtime = "nodejs";
@@ -62,16 +62,9 @@ export async function POST(req: NextRequest) {
   // Best-effort notification email.
   let emailed = false;
   try {
-    const notifyEmail = process.env.NOTIFY_EMAIL ?? "admin@whitneybateson.com";
-    const fromEmail =
-      process.env.FROM_EMAIL ?? "notifications@whitneybateson.com";
-
     const name = clientName(row);
 
-    const resend = getResend();
-    await resend.emails.send({
-      from: fromEmail,
-      to: notifyEmail,
+    await sendNotification({
       subject: `Meta setup complete — ${name}`,
       text: [
         `${name} has finished the Meta setup wizard.`,

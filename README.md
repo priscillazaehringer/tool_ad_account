@@ -14,8 +14,9 @@ Portfolio as a partner once (we inherit access to the Page, ad account,
 Instagram and Pixel), matching Meta's current permissions model. Resume is keyed
 off email only. On completion, the notification email includes a per-step
 summary. Progress saves to Supabase after every action, so they can
-close the tab and resume later by re-entering the same email and last name. When
-they finish, a notification email fires to the admin inbox via Resend.
+close the tab and resume later by re-entering the same email. When they finish,
+a notification email fires to the admin inbox via Gmail (and help requests from
+the "Need help?" widget email the same inbox).
 
 ## Stack
 
@@ -23,12 +24,13 @@ they finish, a notification email fires to the admin inbox via Resend.
 - **Tailwind CSS** for styling
 - **Supabase** (Postgres) for storing progress — accessed server-side only with
   the service role key
-- **Resend** for the completion notification email
+- **Gmail (SMTP via Nodemailer)** for notification emails
 - Designed to deploy on **Vercel**
 
-The Supabase and Resend clients are created lazily (see `src/lib/supabase.ts`
-and `src/lib/resend.ts`) so `next build` succeeds even with no environment
-variables set — clients only initialise when an API route is actually called.
+The Supabase client and Gmail transport are created lazily (see
+`src/lib/supabase.ts` and `src/lib/mailer.ts`) so `next build` succeeds even with
+no environment variables set — they only initialise when an API route is
+actually called.
 
 ## Project structure
 
@@ -46,7 +48,7 @@ src/
   lib/
     steps.ts              Single source of truth: questions, options, videos, BM ID
     supabase.ts           Lazy, cached Supabase admin client
-    resend.ts             Lazy, cached Resend client
+    mailer.ts             Lazy Gmail (SMTP) notifier
 supabase/
   schema.sql              Database schema — run this once in Supabase
 ```
@@ -69,9 +71,9 @@ supabase/
    | --- | --- |
    | `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
    | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server-side only — never expose it) |
-   | `RESEND_API_KEY` | Resend API key |
-   | `NOTIFY_EMAIL` | Where the completion notice is sent (default `admin@whitneybateson.com`) |
-   | `FROM_EMAIL` | Verified sender address (default `notifications@whitneybateson.com`) |
+   | `GMAIL_USER` | The Gmail/Workspace address that sends notifications |
+   | `GMAIL_APP_PASSWORD` | A Google App Password (needs 2-Step Verification — not the normal password) |
+   | `NOTIFY_EMAIL` | Where notifications are sent (default `admin@whitneybateson.com`) |
 
 3. Run the dev server:
 
@@ -82,7 +84,9 @@ supabase/
    Open http://localhost:3000.
 
 > The app builds and runs without env vars set, but the API routes will return
-> errors until Supabase (and, for the final step, Resend) are configured.
+> errors until Supabase is configured. Notification emails are best-effort —
+> without Gmail configured, questions/completions still save; they just don't
+> email.
 
 ## Supabase setup
 
@@ -100,29 +104,35 @@ supabase/
 Because RLS is enabled with no policies, the table is only reachable via the
 service role key, which we use exclusively on the server.
 
-## Resend setup
+## Gmail setup (notifications)
 
-1. Create an account at [resend.com](https://resend.com).
-2. **Verify the sending domain** (`whitneybateson.com`) under **Domains**, adding
-   the DNS records Resend provides. The `FROM_EMAIL` address must be on a
-   verified domain or the email won't send.
-3. Create an API key under **API Keys** and put it in `RESEND_API_KEY`.
+Notifications (help requests + completion summaries) send through Gmail SMTP —
+no domain/DNS verification required.
 
-The completion email is best-effort: if Resend isn't configured or a send fails,
-the client is still marked complete — we just log the failure rather than
-blocking them.
+1. On the Google account you want to send from (e.g. a Workspace address),
+   enable **2-Step Verification**.
+2. Create an **App Password**: Google Account → **Security → App passwords** →
+   generate one for "Mail". It's a 16-character password.
+3. Set the env vars:
+   - `GMAIL_USER` → that Gmail/Workspace address
+   - `GMAIL_APP_PASSWORD` → the app password (no spaces)
+   - `NOTIFY_EMAIL` → where notifications land (e.g. `admin@whitneybateson.com`)
+
+Notifications are best-effort: if Gmail isn't configured or a send fails, the
+client is still marked complete and help requests are still saved to Supabase —
+we just log the failure rather than blocking anything.
 
 ## Deploying to Vercel
 
 1. Push this repo to GitHub (already done if you're reading this there).
 2. In Vercel, **New Project → Import** this repository. Vercel auto-detects
    Next.js; no build settings needed.
-3. Under **Settings → Environment Variables**, add all five:
+3. Under **Settings → Environment Variables**, add:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
-   - `RESEND_API_KEY`
+   - `GMAIL_USER`
+   - `GMAIL_APP_PASSWORD`
    - `NOTIFY_EMAIL`
-   - `FROM_EMAIL`
 4. Deploy. Redeploy after changing env vars so they take effect.
 
 ## Swapping in the real videos later

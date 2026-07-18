@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { getResend } from "@/lib/resend";
+import { sendNotification } from "@/lib/mailer";
 
 export const runtime = "nodejs";
 
@@ -74,17 +74,10 @@ export async function POST(req: NextRequest) {
     try {
       const name =
         [first_name, last_name].filter(Boolean).join(" ") || "A client";
-      const notifyEmail =
-        process.env.NOTIFY_EMAIL ?? "admin@whitneybateson.com";
-      const fromEmail =
-        process.env.FROM_EMAIL ?? "notifications@whitneybateson.com";
 
-      const resend = getResend();
-      await resend.emails.send({
-        from: fromEmail,
-        to: notifyEmail,
-        replyTo: email ?? undefined,
+      await sendNotification({
         subject: `Meta setup — help request from ${name}`,
+        replyTo: email ?? undefined,
         text: [
           `${name} asked for help in the Meta setup wizard.`,
           "",
